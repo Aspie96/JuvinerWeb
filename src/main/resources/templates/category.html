@@ -1,5 +1,6 @@
 {{#category}}
-<h1>{{name}}</h1>
+<h1 class="pt-5">{{name}}</h1>
+<p class="pb-2">{{description}}</p>
 <ul class="px-0">
     {{#threads}}
         <li class="media border-bottom border-gray pt-2">
@@ -8,10 +9,16 @@
             </svg>
             <div class="media-body pb-3 mb-0 ml-2">
                 <p class="my-0 strong">
-                    <a href="/thread">{{title}}</a>
-                    <small class="text-muted"> by <strong>@username</strong></small>
+                    <a href="/thread/{{id}}">{{title}}</a>
+                    {{#firstPost}}
+                       {{#user}}
+                        <small class="text-muted"> by <strong><a href="/user/{{username}}">@{{username}}</a></strong></small>
+                        {{/user}}
+                    {{/firstPost}}
                 </p>
-                <p class="my-0 small text-muted">Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                {{#firstPost}}
+                <p class="my-0 small text-muted">{{text}}</p>
+                {{/firstPost}}
             </div>
         </li>
     {{/threads}}

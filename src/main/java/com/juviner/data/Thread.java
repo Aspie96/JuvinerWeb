@@ -11,18 +11,22 @@ import java.util.Collections;
 import java.util.List;
 
 public class Thread {
+    private int id;
     private final String title;
+    private final Post firstPost;
     private final List<Post> posts;
     private final Category category;
 
-    public Thread(String title, Collection<Post> posts, Category category) {
+    public Thread(int id, String title, Post firstPost, Collection<Post> posts, Category category) {
         this.title = title;
+        this.firstPost = firstPost;
         if(posts == null) {
             this.posts = null;
         } else {
             this.posts = new ArrayList<>(posts);
         }
         this.category = category;
+        this.id = id;
     }
 
     public String getTitle() {
@@ -46,5 +50,17 @@ public class Thread {
     
     public boolean hasCategory() {
         return this.category != null;
+    }
+    
+    public boolean hasId() {
+        return this.id != 0;
+    }
+    
+    public int getId() {
+        return this.id;
+    }
+    
+    public Post getFirstPost() {
+        return this.firstPost;
     }
 }

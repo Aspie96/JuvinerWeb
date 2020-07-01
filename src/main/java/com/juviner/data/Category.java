@@ -15,12 +15,16 @@ import java.util.List;
  * @author Aspie96
  */
 public class Category {
+    private final int id;
     private final String name;
+    private final String description;
     private final List<Thread> threads;
     private final Section section;
     
-    public Category(String name, Collection<Thread> threads, Section section) {
+    public Category(int id, String name, String description, Collection<Thread> threads, Section section) {
+        this.id = id;
         this.name = name;
+        this.description = description;
         if(threads == null) {
             this.threads = null;
         } else {
@@ -50,5 +54,13 @@ public class Category {
     
     public Section getSection() {
         return this.section;
+    }
+    
+    public int getId() {
+        return this.id;
+    }
+    
+    public String getDescription() {
+        return this.description;
     }
 }

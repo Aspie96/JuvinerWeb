@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,7 +35,10 @@ public class CategoryE implements Serializable {
     private SectionE section;
     @OneToMany(mappedBy="category")
     private List<ThreadE> threads;
+    @Column(nullable=false)
     private String name;
+    @Column(nullable=false)
+    private String description;
     
     public CategoryE() { }
     
@@ -50,21 +54,21 @@ public class CategoryE implements Serializable {
         return Collections.unmodifiableList(this.threads);
     }
     
-    public Category toCategory(boolean withThreads, boolean withPosts, boolean withSection, boolean withEmail, boolean withDescription) {
+    public Category toCategory(boolean withCDescription, boolean withAvatar, boolean withThreads, boolean withPosts, boolean withSection, boolean withEmail, boolean withDescription) {
         List<Thread> threads;
         if(withThreads) {
             threads = new ArrayList<>();
-            this.threads.forEach(thread -> threads.add(thread.toThread(withPosts, withEmail, withDescription, false, false)));
+            this.threads.forEach(thread -> threads.add(thread.toThread(withPosts, withEmail, withDescription, withAvatar, false, false)));
         } else {
             threads = null;
         }
         Section section;
         if(withSection) {
-            section = this.getSection().toSection(false, false, false, false, false);
+            section = this.getSection().toSection(false, false, false, false, false, false);
         } else {
             section = null;
         }
-        return new Category(this.getName(), threads, section);
+        return new Category(this.id, this.getName(), this.description, threads, section);
     }
     
     public SectionE getSection() {

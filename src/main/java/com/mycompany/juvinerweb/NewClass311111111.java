@@ -5,9 +5,16 @@
  */
 package com.mycompany.juvinerweb;
 
+import com.juviner.data.Root;
+import com.juviner.data.Section;
 import com.juviner.data.Thread;
+import com.juviner.data.User;
+import com.mycompany.juvinerweb.db.SectionDao;
+import com.mycompany.juvinerweb.db.SectionE;
 import com.mycompany.juvinerweb.db.ThreadDao;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,24 +28,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/thread/{thread_id}")
-class NewClass3 {
+@RequestMapping("/root")
+class NewClass311111111 {
     @Autowired
-    private ThreadDao threadDao;
+    private SectionDao sectionDao;
 
     @GetMapping
-    public String home(@PathVariable int thread_id, CsrfToken csrfToken, Authentication authentication, Model model) {
-        LoggedUser user;
-        if(authentication != null) {
-            user = (LoggedUser)authentication.getPrincipal();
+    public String home(@AuthenticationPrincipal LoggedUser user, Model model) {
+        User session;
+        if(user != null) {
+            session = user.getUser();
         } else {
-            user = null;
+            session = null;
         }
-        Thread thread = this.threadDao.findById(thread_id).get().toThread(true, false, false, true, true, true);
-        model.addAttribute("thread", thread);
-        model.addAttribute("session", user);
-        model.addAttribute("_csrf", csrfToken);
-        System.out.println(user);
-        return "thread_page";
+        model.addAttribute("session", session);
+        List<Section> sections = new ArrayList<>();
+        for(SectionE section : this.sectionDao.findAll()) {
+            sections.add(section.toSection(true, false, false, false, false, false));
+        }
+        model.addAttribute("root", new Root("Lorem ipsum dolor sit amet, consectetur adipisci elit, sed do eiusmod tempor incidunt ut labore et dolore magna aliqua.", sections));
+        return "home_page";
     }
 }

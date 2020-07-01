@@ -1,0 +1,52 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.mycompany.juvinerweb;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.juviner.data.User;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+
+/**
+ *
+ * @author Aspie96
+ */
+public class ApiLogin extends JwtLoginFilter {
+    public ApiLogin(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager) {
+        super("/api" + defaultFilterProcessesUrl, authenticationManager);
+    }
+
+    @Override
+    public void respond(User user, String jwt, HttpServletRequest req, HttpServletResponse resp, Authentication authResult, AuthenticationException failed) throws IOException, ServletException {
+        if(user != null) {
+            Cookie cookie = new Cookie("auth", jwt);
+            cookie.setPath("/");
+            resp.addCookie(cookie);
+            resp.setContentType("application/json;charset=utf-8");
+            try(PrintWriter out = resp.getWriter()) {
+                out.write(new ObjectMapper().writeValueAsString(new ApiSuccessResponse("user", user)));
+                out.flush();
+            }
+        } else {
+            try(PrintWriter out = resp.getWriter()) {
+                out.write(new ObjectMapper().writeValueAsString(new ApiFailureResponse("Username or password wrong.")));
+                out.flush();
+            }
+        }
+    }
+
+    @Override
+    public AccountCredentials getCredentials(HttpServletRequest req) throws IOException {
+        return new ObjectMapper().readValue(req.getInputStream(), AccountCredentials.class);
+    }
+}

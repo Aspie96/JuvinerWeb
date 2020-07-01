@@ -5,9 +5,10 @@
  */
 package com.mycompany.juvinerweb;
 
-import com.mycompany.juvinerweb.db.ThreadDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.reactive.result.view.CsrfRequestDataValueProcessor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,13 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Aspie96
  */
 @Controller
-@RequestMapping("/gyhuj")
-class NewClass3333111 {
-    @Autowired
-    private ThreadDao threadDao;
-
+@RequestMapping("/login")
+class NewClass33331111 {
     @GetMapping
-    public String getNewThread() {
-        return "new_thread";
+    public String getLogin(CsrfToken csrfToken, Model model) {
+        model.addAttribute("_csrf", csrfToken);
+        return "login_page";
     }
 }

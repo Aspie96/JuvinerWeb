@@ -10,14 +10,18 @@ package com.juviner.data;
  * @author Aspie96
  */
 public class User {
-    private final String username;
-    private final String email;
-    private final String description;
+    private String username;
+    private String email;
+    private String description;
+    private String avatar;
+    
+    public User() { }
 
-    public User(String username, String email, String description) {
+    public User(String username, String email, String description, String avatar) {
         this.username = username;
         this.email = email;
         this.description = description;
+        this.avatar = avatar;
     }
     
     public String getUsername() {
@@ -38,5 +42,9 @@ public class User {
     
     public boolean hasDescription() {
         return this.description != null;
+    }
+    
+    public String getAvatar() {
+        return this.avatar;
     }
 }

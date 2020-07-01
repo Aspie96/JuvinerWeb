@@ -31,8 +31,9 @@ public class ThreadE implements Serializable {
 
     public ThreadE() { }
 
-    public ThreadE(String title) {
+    public ThreadE(String title, CategoryE category) {
         this.title = title;
+        this.category = category;
     }
 
     public int getId() {
@@ -51,20 +52,21 @@ public class ThreadE implements Serializable {
         return Collections.unmodifiableList(this.posts);
     }
 
-    public Thread toThread(boolean withPosts, boolean withEmail, boolean withDescription, boolean withCategory, boolean withSection) {
+    public Thread toThread(boolean withPosts, boolean withEmail, boolean withDescription, boolean withAvatar, boolean withCategory, boolean withSection) {
         List<Post> posts;
         Category category;
         if(withPosts) {
             posts = new ArrayList<>();
-            this.posts.forEach(post -> posts.add(post.toPost(false, withEmail, withDescription, false, false)));
+            this.posts.forEach(post -> posts.add(post.toPost(false, withEmail, withDescription, withAvatar, false, false)));
         } else {
             posts = null;
         }
         if(withCategory) {
-            category = this.category.toCategory(false, false, withSection, false, false);
+            category = this.category.toCategory(false, false, false, false, withSection, false, false);
         } else {
             category = null;
         }
-        return new Thread(this.title, posts, category);
+        System.out.println(this.posts.size());
+        return new Thread(this.id, this.title, this.posts.get(0).toPost(false, withEmail, withAvatar, withDescription, withCategory, withSection), posts, category);
     }
 }

@@ -30,16 +30,36 @@ public class UserE implements Serializable {
     private String description;
     @Column(nullable=false)
     private String email;
+    @Column(nullable=false)
+    private String password;
+    @Column(nullable=true)
+    private String avatar;
     
     public UserE() { }
+    
+    public UserE(int id, String username, String description, String email, String password, String avatar) {
+        this.id = id;
+        this.description = description; this.username = username;
+        this.email = email;
+        this.password = password;
+        this.avatar = avatar;
+    }
+    
+    public UserE(String username, String description, String email, String password, String avatar) {
+        this.description = description; this.username = username;
+        this.email = email;
+        this.password = password;
+        this.avatar = avatar;
+    }
     
     public int getId() {
         return this.id;
     }
     
-    public User toUser(boolean withEmail, boolean withDescription) {
+    public User toUser(boolean withEmail, boolean withDescription, boolean withAvatar) {
         String email;
         String description;
+        String avatar;
         if(withEmail) {
             email = this.email;
         } else {
@@ -50,7 +70,12 @@ public class UserE implements Serializable {
         } else {
             description = null;
         }
-        return new User(this.username, email, description);
+        if(withAvatar) {
+            avatar = this.avatar;
+        } else {
+            avatar = null;
+        }
+        return new User(this.username, email, description, avatar);
     }
     
     public String getUsername() {
@@ -63,5 +88,13 @@ public class UserE implements Serializable {
     
     public String getEmail() {
         return this.email;
+    }
+    
+    public String getPassword() {
+        return this.password;
+    }
+    
+    public String getAvatar() {
+        return this.avatar;
     }
 }

@@ -22,6 +22,7 @@ public final class ApiSuccessResponse extends ApiResponse {
     private final ResponseData data;
 
     public ApiSuccessResponse(String name, Object data) {
+        super(true);
         this.data = new ResponseData();
         this.data.getProperties().put(name, data);
     }

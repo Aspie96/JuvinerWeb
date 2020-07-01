@@ -5,10 +5,13 @@
  */
 package com.mycompany.juvinerweb.db;
 
+import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 
 /**
  *
  * @author Aspie96
  */
-public interface UserDao extends CrudRepository<UserE, Integer> { }
+public interface UserDao extends CrudRepository<UserE, Integer> {
+    public Optional<UserE> findByUsername(String username);
+}
