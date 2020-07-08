@@ -62,7 +62,7 @@ public class Api {
     @GetMapping("/users/{username}")
     public Object getUser(@PathVariable String username) {
         Optional<UserE> user = this.userDao.findByUsername(username);
-        if(!user.isPresent()) {
+        if(user.isPresent()) {
             return new ApiSuccessResponse("user", user.get().toUser(false, true, true, true));
         } else {
             return new ResponseEntity(new ApiFailureResponse("Thread not found"), HttpStatus.NOT_FOUND);
