@@ -62,10 +62,10 @@ public class Api {
     @GetMapping("/users/{username}")
     public Object getUser(@PathVariable String username) {
         Optional<UserE> user = this.userDao.findByUsername(username);
-        if(user.isPresent()) {
+        if(!user.isPresent()) {
             return new ApiSuccessResponse("user", user.get().toUser(false, true, true, true));
         } else {
-            return new ResponseEntity(new ApiFailureResponse("Thread not found"), HttpStatus.NOT_FOUND);
+            
         }
     }
     
@@ -122,13 +122,13 @@ public class Api {
                         postDao.save(post);
                         return new ApiSuccessResponse("thread", new Thread(thread_id, title, post.toPost(false, false, false, false, false, false, false), null, category.get().toCategory(false, false, false, false, false, false, false, false)));
                     } else {
-                        return new ResponseEntity(new ApiFailureResponse("text parameter missing"), HttpStatus.BAD_REQUEST);
+                        return new ResponseEntity(new ApiFailureResponse("category not found"), HttpStatus.NOT_FOUND);
                     }
                 } else {
-                    return new ResponseEntity(new ApiFailureResponse("text parameter missing"), HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity(new ApiFailureResponse("category_id must be integer"), HttpStatus.BAD_REQUEST);
                 }
             } else {
-                return new ResponseEntity(new ApiFailureResponse("text parameter missing"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new ApiFailureResponse("category_id parameter is missing"), HttpStatus.BAD_REQUEST);
             }
         } else {
             return new ResponseEntity(new ApiFailureResponse("text parameter missing"), HttpStatus.BAD_REQUEST);
