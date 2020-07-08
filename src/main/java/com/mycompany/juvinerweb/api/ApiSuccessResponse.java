@@ -1,4 +1,4 @@
-package com.mycompany.juvinerweb;
+package com.mycompany.juvinerweb.api;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonGetter;

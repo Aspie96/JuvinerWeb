@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.juvinerweb;
+package com.mycompany.juvinerweb.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.juviner.data.User;
+import com.mycompany.juvinerweb.AccountCredentials;
+import com.mycompany.juvinerweb.JwtLoginFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;

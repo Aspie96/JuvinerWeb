@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.juvinerweb;
+package com.mycompany.juvinerweb.api;
 
 import com.juviner.data.Category;
 import com.juviner.data.Root;
 import com.juviner.data.Section;
 import com.juviner.data.Thread;
 import com.juviner.data.User;
+import com.mycompany.juvinerweb.LoggedUser;
 import com.mycompany.juvinerweb.db.CategoryDao;
 import com.mycompany.juvinerweb.db.CategoryE;
 import com.mycompany.juvinerweb.db.PostDao;
@@ -62,20 +63,19 @@ public class Api {
     @GetMapping("/users/{username}")
     public Object getUser(@PathVariable String username) {
         Optional<UserE> user = this.userDao.findByUsername(username);
-        if(user.isPresent()) {
-            return new ApiSuccessResponse("user", user.get().toUser(false, true, true, true));
-        } else {
+        if(!user.isPresent()) {
             return new ResponseEntity(new ApiFailureResponse("Thread not found"), HttpStatus.NOT_FOUND);
         }
+        return new ApiSuccessResponse("user", user.get().toUser(false, true, true, true));
     }
     
     @GetMapping("/categories/{id}")
     public Object getSection(@PathVariable int id) {
         Optional<CategoryE> category = this.categoryDao.findById(id);
-        if(category.isPresent()) {
-            return new ApiSuccessResponse("category", category.get().toCategory(true, false, false, false, false, true, false, false));
+        if(!category.isPresent()) {
+            return new ResponseEntity(new ApiFailureResponse("Thread not found"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(new ApiFailureResponse("Thread not found"), HttpStatus.NOT_FOUND);
+        return new ApiSuccessResponse("category", category.get().toCategory(true, false, false, false, false, true, false, false));
     }
     
     @GetMapping("/root")
@@ -88,51 +88,45 @@ public class Api {
     
     @PostMapping(path="/threads/{thread_id}/posts", consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Object postPost(@PathVariable int thread_id, @AuthenticationPrincipal LoggedUser user, @RequestBody LinkedHashMap body) {
-        if(body.containsKey("text")) {
-            String text = (String)body.get("text");
-            System.out.println(threadDao.findById(thread_id));
-            System.out.println(userDao.findByUsername(user.getUsername()));
-            Optional<ThreadE> thread = threadDao.findById(thread_id);
-            if(thread.isPresent()) {
-                PostE post = new PostE(threadDao.findById(thread_id).get(), userDao.findByUsername(user.getUsername()).get(), text);
-                return new ApiSuccessResponse("post", postDao.save(post).toPost(false, false, false, false, false, false, false));
-            } else {
-                return new ResponseEntity(new ApiFailureResponse("Thread not found"), HttpStatus.NOT_FOUND);
-            }
-        } else {
+        if(!body.containsKey("text")) {
             return new ResponseEntity(new ApiFailureResponse("text parameter missing"), HttpStatus.BAD_REQUEST);
         }
+        String text = (String)body.get("text");
+        System.out.println(threadDao.findById(thread_id));
+        System.out.println(userDao.findByUsername(user.getUsername()));
+        Optional<ThreadE> thread = threadDao.findById(thread_id);
+        if(!thread.isPresent()) {
+            return new ResponseEntity(new ApiFailureResponse("Thread not found"), HttpStatus.NOT_FOUND);
+        }
+        PostE post = new PostE(threadDao.findById(thread_id).get(), userDao.findByUsername(user.getUsername()).get(), text);
+        return new ApiSuccessResponse("post", postDao.save(post).toPost(false, false, false, false, false, false, false));
     }
     
     @PostMapping(path="/threads", consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Object postThread(@AuthenticationPrincipal LoggedUser user, @RequestBody LinkedHashMap body) {
-        if(body.containsKey("text")) {
-            String text = (String)body.get("text");
-            if(body.containsKey("category_id")) {
-                if(body.get("category_id").getClass() == Integer.class) {
-                    int category_id = (int)body.get("category_id");
-                    System.out.println(categoryDao.findById(category_id));
-                    System.out.println(userDao.findByUsername(user.getUsername()));
-                    String title = (String)body.get("title");
-                    Optional<CategoryE> category = categoryDao.findById(category_id);
-                    if(category.isPresent()) {
-                        ThreadE thread = threadDao.save(new ThreadE(title, category.get()));
-                        int thread_id = thread.getId();
-                        PostE post = new PostE(thread, userDao.findByUsername(user.getUsername()).get(), text);
-                        postDao.save(post);
-                        return new ApiSuccessResponse("thread", new Thread(thread_id, title, post.toPost(false, false, false, false, false, false, false), null, category.get().toCategory(false, false, false, false, false, false, false, false)));
-                    } else {
-                        return new ResponseEntity(new ApiFailureResponse("category not found"), HttpStatus.NOT_FOUND);
-                    }
-                } else {
-                    return new ResponseEntity(new ApiFailureResponse("category_id must be integer"), HttpStatus.BAD_REQUEST);
-                }
-            } else {
-                return new ResponseEntity(new ApiFailureResponse("category_id parameter is missing"), HttpStatus.BAD_REQUEST);
-            }
-        } else {
+        if(!body.containsKey("text")) {
             return new ResponseEntity(new ApiFailureResponse("text parameter missing"), HttpStatus.BAD_REQUEST);
         }
+        String text = (String)body.get("text");
+        if(!body.containsKey("category_id")) {
+            return new ResponseEntity(new ApiFailureResponse("category_id parameter is missing"), HttpStatus.BAD_REQUEST);
+        }
+        if(body.get("category_id").getClass() != Integer.class) {
+            return new ResponseEntity(new ApiFailureResponse("category_id must be integer"), HttpStatus.BAD_REQUEST);
+        }
+        int category_id = (int)body.get("category_id");
+        System.out.println(categoryDao.findById(category_id));
+        System.out.println(userDao.findByUsername(user.getUsername()));
+        String title = (String)body.get("title");
+        Optional<CategoryE> category = categoryDao.findById(category_id);
+        if(!category.isPresent()) {
+            return new ResponseEntity(new ApiFailureResponse("category not found"), HttpStatus.NOT_FOUND);
+        }
+        ThreadE thread = threadDao.save(new ThreadE(title, category.get()));
+        int thread_id = thread.getId();
+        PostE post = new PostE(thread, userDao.findByUsername(user.getUsername()).get(), text);
+        postDao.save(post);
+        return new ApiSuccessResponse("thread", new Thread(thread_id, title, post.toPost(false, false, false, false, false, false, false), null, category.get().toCategory(false, false, false, false, false, false, false, false)));
     }
     
     @GetMapping("/user/details")

@@ -51,6 +51,7 @@ import org.springframework.web.server.ResponseStatusException;
 class NewClass333311111111111 {
     @Autowired
     private UserDao userDao;
+    private Map<String, String> env = System.getenv();
     
     @GetMapping("/add_github")
     public String getImage(Model model, CsrfToken csrfToken, @RequestParam String code) {
@@ -61,13 +62,14 @@ class NewClass333311111111111 {
     
     @PostMapping("/add_github")
     public String getMapping(@RequestParam String code, @AuthenticationPrincipal LoggedUser lUser) throws IOException {
+        String secret = env.get("GITHUB_SECRET");
         URL url = new URL("https://github.com/login/oauth/access_token");
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper request = new ObjectMapper();
         ObjectNode user = request.createObjectNode();
         user.put("code", code);
         user.put("client_id", "Iv1.f1dd9ba30d3451a9");
-        user.put("client_secret", "ed4c6e25134ed46d687345b48fa947558e6c8956");
+        user.put("client_secret", secret);
         user.put("accept", "json");
         String json = request.writerWithDefaultPrettyPrinter().writeValueAsString(user);
         HttpHeaders headers = new HttpHeaders();

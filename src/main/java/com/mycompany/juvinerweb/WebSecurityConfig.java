@@ -5,6 +5,8 @@
  */
 package com.mycompany.juvinerweb;
 
+import com.mycompany.juvinerweb.api.ApiAuthenticationEntryPoint;
+import com.mycompany.juvinerweb.api.ApiLogin;
 import com.juviner.data.User;
 import java.io.IOException;
 import javax.servlet.ServletException;

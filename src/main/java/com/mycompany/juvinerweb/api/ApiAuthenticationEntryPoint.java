@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.juvinerweb;
+package com.mycompany.juvinerweb.api;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

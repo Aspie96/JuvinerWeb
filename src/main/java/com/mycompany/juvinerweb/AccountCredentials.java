@@ -26,4 +26,3 @@ public class AccountCredentials {
         return this.password;
     }
 }
-
