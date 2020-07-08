@@ -39,7 +39,7 @@ class NewClass31 {
     private UserDao userDao;
 
     @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public String home(@PathVariable int thread_id, @AuthenticationPrincipal LoggedUser user, @RequestParam Map<String, String> body) {
+    public String postPost(@PathVariable int thread_id, @AuthenticationPrincipal LoggedUser user, @RequestParam Map<String, String> body) {
         String text = body.get("text");
         System.out.println(threadDao.findById(thread_id));
         System.out.println(userDao.findByUsername(user.getUsername()));

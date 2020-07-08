@@ -27,14 +27,14 @@ class NewClass33331 {
     private CategoryDao categoryDao;
 
     @GetMapping
-    public String home(@AuthenticationPrincipal LoggedUser user, @PathVariable int id, Model model) {
+    public String getCategory(@AuthenticationPrincipal LoggedUser user, @PathVariable int id, Model model) {
         User session;
         if(user == null) {
             session = null;
         } else {
             session = user.getUser();
         }
-        model.addAttribute("session", user);
+        model.addAttribute("session", session);
         Category category = this.categoryDao.findById(id).get().toCategory(true, false, false, true, false, true, false, false);
         model.addAttribute("category", category);
         return "category_page";

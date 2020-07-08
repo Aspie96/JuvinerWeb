@@ -54,14 +54,14 @@ class NewClass333311111111111 {
     private Map<String, String> env = System.getenv();
     
     @GetMapping("/add_github")
-    public String getImage(Model model, CsrfToken csrfToken, @RequestParam String code) {
+    public String getAddGithub(Model model, CsrfToken csrfToken, @RequestParam String code) {
         model.addAttribute("_csrf", csrfToken);
         model.addAttribute("code", code);
         return "add_github_page";
     }
     
     @PostMapping("/add_github")
-    public String getMapping(@RequestParam String code, @AuthenticationPrincipal LoggedUser lUser) throws IOException {
+    public String postAddGithub(@RequestParam String code, @AuthenticationPrincipal LoggedUser lUser) throws IOException {
         String secret = env.get("GITHUB_SECRET");
         URL url = new URL("https://github.com/login/oauth/access_token");
         RestTemplate restTemplate = new RestTemplate();
