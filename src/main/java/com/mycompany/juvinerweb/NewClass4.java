@@ -56,7 +56,7 @@ public class NewClass4 {
         model.addAttribute("_csrf", csrfToken);
         List<Section> sections = new ArrayList<>();
         for(SectionE section : this.sectionDao.findAll()) {
-            sections.add(section.toSection(true, false, false, false, false, false));
+            sections.add(section.toSection(true, false, false, false, false, false, false));
         }
         model.addAttribute("root", new Root("", sections));
         return "new_thread_page";

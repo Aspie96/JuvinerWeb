@@ -34,29 +34,33 @@ public class UserE implements Serializable {
     private String password;
     @Column(nullable=true)
     private String avatar;
+    @Column(nullable=true)
+    private String github;
     
     public UserE() { }
     
-    public UserE(int id, String username, String description, String email, String password, String avatar) {
+    public UserE(int id, String username, String description, String email, String password, String avatar, String github) {
         this.id = id;
         this.description = description; this.username = username;
         this.email = email;
         this.password = password;
         this.avatar = avatar;
+        this.github = github;
     }
     
-    public UserE(String username, String description, String email, String password, String avatar) {
+    public UserE(String username, String description, String email, String password, String avatar, String github) {
         this.description = description; this.username = username;
         this.email = email;
         this.password = password;
         this.avatar = avatar;
+        this.github = github;
     }
     
     public int getId() {
         return this.id;
     }
     
-    public User toUser(boolean withEmail, boolean withDescription, boolean withAvatar) {
+    public User toUser(boolean withEmail, boolean withDescription, boolean withAvatar, boolean withGithub) {
         String email;
         String description;
         String avatar;
@@ -75,7 +79,13 @@ public class UserE implements Serializable {
         } else {
             avatar = null;
         }
-        return new User(this.username, email, description, avatar);
+        String github;
+        if(withAvatar) {
+            github = this.github;
+        } else {
+            github = this.github;
+        }
+        return new User(this.username, email, description, avatar, github);
     }
     
     public String getUsername() {
@@ -96,5 +106,9 @@ public class UserE implements Serializable {
     
     public String getAvatar() {
         return this.avatar;
+    }
+    
+    public String getGithub() {
+        return this.github;
     }
 }

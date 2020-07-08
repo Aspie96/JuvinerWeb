@@ -11,6 +11,8 @@
         <dd class="col-sm-9">{{email}}</dd>
         <dt class="col-sm-3"><label for="descriptionInput">Description</label></dt>
         <dd class="col-sm-9"><textarea name="description" class="form-control" id="descriptionInput" rows="5">{{description}}</textarea></dd>
+        <dt class="col-sm-3">Github</dt>
+        <dd class="col-sm-9">{{#github}}{{github}}{{/github}}{{^github}}<a href="https://github.com/login/oauth/authorize?client_id=Iv1.f1dd9ba30d3451a9">Set GitHub</a>{{/github}}</dd>
         <dt class="col-sm-3"></dt>
         <dd class="col-sm-9"><button type="submit" class="btn btn-primary">Submit</button></dd>
         </dl>

@@ -54,17 +54,17 @@ public class CategoryE implements Serializable {
         return Collections.unmodifiableList(this.threads);
     }
     
-    public Category toCategory(boolean withCDescription, boolean withAvatar, boolean withThreads, boolean withPosts, boolean withSection, boolean withEmail, boolean withDescription) {
+    public Category toCategory(boolean withCDescription, boolean withAvatar, boolean withGithub, boolean withThreads, boolean withPosts, boolean withSection, boolean withEmail, boolean withDescription) {
         List<Thread> threads;
         if(withThreads) {
             threads = new ArrayList<>();
-            this.threads.forEach(thread -> threads.add(thread.toThread(withPosts, withEmail, withDescription, withAvatar, false, false)));
+            this.threads.forEach(thread -> threads.add(thread.toThread(withPosts, withEmail, withDescription, withAvatar, withGithub, false, false)));
         } else {
             threads = null;
         }
         Section section;
         if(withSection) {
-            section = this.getSection().toSection(false, false, false, false, false, false);
+            section = this.getSection().toSection(false, false, false, false, false, false, false);
         } else {
             section = null;
         }

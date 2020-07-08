@@ -39,7 +39,7 @@ public class NewClass41 {
     @GetMapping
     public String getThreadNew(@AuthenticationPrincipal LoggedUser user, CsrfToken csrfToken, Model model) {
         model.addAttribute("_csrf", csrfToken);
-        User us = userDao.findByUsername(user.getUsername()).get().toUser(true, true, true);
+        User us = userDao.findByUsername(user.getUsername()).get().toUser(true, true, true, true);
         model.addAttribute("user", us);
         model.addAttribute("session", us);
         System.out.println(us.getEmail());
@@ -50,7 +50,7 @@ public class NewClass41 {
     public String postThreadNew(@AuthenticationPrincipal LoggedUser user, @RequestParam Map<String, String> body) {
         String description = body.get("description");
         UserE old = userDao.findByUsername(user.getUsername()).get();
-        UserE newU = new UserE(old.getId(), old.getUsername(), description, old.getEmail(), old.getPassword(), old.getAvatar());
+        UserE newU = new UserE(old.getId(), old.getUsername(), description, old.getEmail(), old.getPassword(), old.getAvatar(), old.getGithub());
         userDao.save(newU);
         return "redirect:/user";
     }

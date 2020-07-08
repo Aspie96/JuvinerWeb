@@ -48,7 +48,7 @@ class NewClass333311111111 {
         String username = body.get("username");
         String email = body.get("email");
         String description = body.get("description");
-        UserE user = new UserE(username, description, email, new BCryptPasswordEncoder().encode(password), null);
+        UserE user = new UserE(username, description, email, new BCryptPasswordEncoder().encode(password), null, null);
         userDao.save(user);
         return "redirect:/register_confirm";
     }

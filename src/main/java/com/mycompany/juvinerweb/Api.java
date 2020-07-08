@@ -53,7 +53,7 @@ public class Api {
     public Object getThread(@PathVariable int thread_id) {
         Optional<ThreadE> thread = this.threadDao.findById(thread_id);
         if(thread.isPresent()) {
-            return new ApiSuccessResponse("thread", thread.get().toThread(true, false, false, true, true, true));
+            return new ApiSuccessResponse("thread", thread.get().toThread(true, false, false, true, true, true, true));
         } else {
             return new ResponseEntity(new ApiFailureResponse("Thread not found"), HttpStatus.NOT_FOUND);
         }
@@ -63,7 +63,7 @@ public class Api {
     public Object getUser(@PathVariable String username) {
         Optional<UserE> user = this.userDao.findByUsername(username);
         if(user.isPresent()) {
-            return new ApiSuccessResponse("user", user.get().toUser(false, true, true));
+            return new ApiSuccessResponse("user", user.get().toUser(false, true, true, true));
         } else {
             return new ResponseEntity(new ApiFailureResponse("Thread not found"), HttpStatus.NOT_FOUND);
         }
@@ -73,7 +73,7 @@ public class Api {
     public Object getSection(@PathVariable int id) {
         Optional<CategoryE> category = this.categoryDao.findById(id);
         if(category.isPresent()) {
-            return new ApiSuccessResponse("category", category.get().toCategory(true, true, true, false, true, false, false));
+            return new ApiSuccessResponse("category", category.get().toCategory(true, false, false, false, false, true, false, false));
         }
         return new ResponseEntity(new ApiFailureResponse("Thread not found"), HttpStatus.NOT_FOUND);
     }
@@ -81,7 +81,7 @@ public class Api {
     @GetMapping("/root")
     public Object getRoot() {
         List<Section> sections = new ArrayList<Section>();
-        sectionDao.findAll().forEach(section -> sections.add(section.toSection(true, false, false, false, false, false)));
+        sectionDao.findAll().forEach(section -> sections.add(section.toSection(true, false, false, false, false, false, false)));
         Root root = new Root("", sections);
         return new ApiSuccessResponse("root", root);
     }
@@ -95,7 +95,7 @@ public class Api {
             Optional<ThreadE> thread = threadDao.findById(thread_id);
             if(thread.isPresent()) {
                 PostE post = new PostE(threadDao.findById(thread_id).get(), userDao.findByUsername(user.getUsername()).get(), text);
-                return new ApiSuccessResponse("post", postDao.save(post).toPost(false, false, false, false, false, false));
+                return new ApiSuccessResponse("post", postDao.save(post).toPost(false, false, false, false, false, false, false));
             } else {
                 return new ResponseEntity(new ApiFailureResponse("Thread not found"), HttpStatus.NOT_FOUND);
             }
@@ -120,7 +120,7 @@ public class Api {
                         int thread_id = thread.getId();
                         PostE post = new PostE(thread, userDao.findByUsername(user.getUsername()).get(), text);
                         postDao.save(post);
-                        return new ApiSuccessResponse("thread", new Thread(thread_id, title, post.toPost(false, false, false, false, false, false), null, category.get().toCategory(false, false, false, false, false, false, false)));
+                        return new ApiSuccessResponse("thread", new Thread(thread_id, title, post.toPost(false, false, false, false, false, false, false), null, category.get().toCategory(false, false, false, false, false, false, false, false)));
                     } else {
                         return new ResponseEntity(new ApiFailureResponse("text parameter missing"), HttpStatus.BAD_REQUEST);
                     }
@@ -137,15 +137,15 @@ public class Api {
     
     @GetMapping("/user/details")
     public Object getDetails(@AuthenticationPrincipal LoggedUser user) {
-        User u = this.userDao.findByUsername(user.getUsername()).get().toUser(true, true, true);
+        User u = this.userDao.findByUsername(user.getUsername()).get().toUser(true, true, true, true);
         return new ApiSuccessResponse("user", u);
     }
     
     @PostMapping("/user/details")
     public Object postDetails(@AuthenticationPrincipal LoggedUser user, @RequestBody LinkedHashMap body) {
         UserE old = this.userDao.findByUsername(user.getUsername()).get();
-        UserE newU = new UserE(old.getId(), old.getUsername(), (String)body.get("description"), old.getEmail(), old.getPassword(), old.getAvatar());
-        User u = this.userDao.save(newU).toUser(true, true, true);
+        UserE newU = new UserE(old.getId(), old.getUsername(), (String)body.get("description"), old.getEmail(), old.getPassword(), old.getAvatar(), old.getGithub());
+        User u = this.userDao.save(newU).toUser(true, true, true, true);
         return new ApiSuccessResponse("user", u);
     }
 }

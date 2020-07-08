@@ -35,7 +35,7 @@ class NewClass33331 {
             session = user.getUser();
         }
         model.addAttribute("session", user);
-        Category category = this.categoryDao.findById(id).get().toCategory(true, true, false, false, true, false, false);
+        Category category = this.categoryDao.findById(id).get().toCategory(true, false, false, true, false, true, false, false);
         model.addAttribute("category", category);
         return "category_page";
     }

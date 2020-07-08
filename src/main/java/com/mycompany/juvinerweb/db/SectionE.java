@@ -48,11 +48,11 @@ public class SectionE implements Serializable {
         return this.name;
     }
     
-    public Section toSection(boolean withCategories, boolean withThreads, boolean withPosts, boolean withEmail, boolean withDescription, boolean withAvatar) {
+    public Section toSection(boolean withCategories, boolean withThreads, boolean withPosts, boolean withEmail, boolean withDescription, boolean withAvatar, boolean withGithub) {
         List<Category> categories;
         if(withCategories) {
             categories = new ArrayList<>();
-            this.categories.forEach(category -> categories.add(category.toCategory(false, withThreads, withPosts, false, withEmail, withDescription, withAvatar)));
+            this.categories.forEach(category -> categories.add(category.toCategory(false, withThreads, withPosts, false, withEmail, withDescription, withAvatar, withGithub)));
         } else {
             categories = null;
         }

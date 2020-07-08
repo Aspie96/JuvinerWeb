@@ -51,10 +51,10 @@ class NewClass333311111 {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         Files.copy(file.getInputStream(), Paths.get("D:\\Downloads\\avatars\\" + user.getUsername()), StandardCopyOption.REPLACE_EXISTING);
         UserE u = userDao.findByUsername(user.getUsername()).get();
-        UserE newU = new UserE(u.getId(), u.getUsername(), u.getDescription(), u.getEmail(), u.getPassword(), file.getOriginalFilename());
+        UserE newU = new UserE(u.getId(), u.getUsername(), u.getDescription(), u.getEmail(), u.getPassword(), file.getOriginalFilename(), u.getGithub());
         userDao.save(newU);
-        String jwt = new JwtBuilder().buildJwt(newU.toUser(true, true, true), user.getAuthorities());
-        System.out.println(newU.toUser(true, true, true).getAvatar());
+        String jwt = new JwtBuilder().buildJwt(newU.toUser(true, true, true, true), user.getAuthorities());
+        System.out.println(newU.toUser(true, true, true, true).getAvatar());
         response.addCookie(new Cookie("auth", jwt));
         User session = user.getUser();
         model.addAttribute("session", session);

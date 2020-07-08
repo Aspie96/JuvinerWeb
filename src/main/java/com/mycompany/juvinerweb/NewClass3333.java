@@ -40,7 +40,7 @@ class NewClass3333 {
         model.addAttribute("session", current);
         Optional<UserE> user = this.userDao.findByUsername(username);
         if(user.isPresent()) {
-            model.addAttribute("user", user.get().toUser(false, true, true));
+            model.addAttribute("user", user.get().toUser(false, true, true, true));
             return "user_page";
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND); 

@@ -34,7 +34,7 @@ class NewClass3 {
         } else {
             user = null;
         }
-        Thread thread = this.threadDao.findById(thread_id).get().toThread(true, false, false, true, true, true);
+        Thread thread = this.threadDao.findById(thread_id).get().toThread(true, false, false, true, true, true, true);
         model.addAttribute("thread", thread);
         model.addAttribute("session", user);
         model.addAttribute("_csrf", csrfToken);

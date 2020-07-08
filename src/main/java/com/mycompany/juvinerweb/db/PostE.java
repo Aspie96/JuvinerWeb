@@ -64,13 +64,13 @@ public class PostE implements Serializable {
         return this.thread;
     }
 
-    public Post toPost(boolean withThread, boolean withEmail, boolean withDescription, boolean withAvatar, boolean withCategory, boolean withSection) {
+    public Post toPost(boolean withThread, boolean withEmail, boolean withDescription, boolean withAvatar, boolean withGithub, boolean withCategory, boolean withSection) {
         Thread thread;
         if(withThread) {
-            thread = this.thread.toThread(false, false, false, false, withCategory, withSection);
+            thread = this.thread.toThread(false, false, false, false, false, withCategory, withSection);
         } else {
             thread = null;
         }
-        return new Post(this.time.toLocalDateTime(), this.user.toUser(withEmail, withDescription, withAvatar), this.getText(), thread);
+        return new Post(this.time.toLocalDateTime(), this.user.toUser(withEmail, withDescription, withAvatar, withGithub), this.getText(), thread);
     }
 }

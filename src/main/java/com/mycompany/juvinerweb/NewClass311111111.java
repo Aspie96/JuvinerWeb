@@ -44,7 +44,7 @@ class NewClass311111111 {
         model.addAttribute("session", session);
         List<Section> sections = new ArrayList<>();
         for(SectionE section : this.sectionDao.findAll()) {
-            sections.add(section.toSection(true, false, false, false, false, false));
+            sections.add(section.toSection(true, false, false, false, false, false, false));
         }
         model.addAttribute("root", new Root("Lorem ipsum dolor sit amet, consectetur adipisci elit, sed do eiusmod tempor incidunt ut labore et dolore magna aliqua.", sections));
         return "home_page";
