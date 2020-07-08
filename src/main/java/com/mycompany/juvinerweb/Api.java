@@ -65,7 +65,7 @@ public class Api {
         if(!user.isPresent()) {
             return new ApiSuccessResponse("user", user.get().toUser(false, true, true, true));
         } else {
-            
+            return new ResponseEntity(new ApiFailureResponse("Thread not found"), HttpStatus.NOT_FOUND);
         }
     }
     
