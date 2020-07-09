@@ -37,13 +37,13 @@ class NewClass333311111111 {
     private UserDao userDao;
 
     @GetMapping
-    public String home(Model model, CsrfToken csrfToken) {
+    public String getRegister(Model model, CsrfToken csrfToken) {
         model.addAttribute("_csrf", csrfToken);
         return "register_page";
     }
     
     @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public String home(@RequestParam Map<String, String> body) {
+    public String postRegister(@RequestParam Map<String, String> body) {
         String password = body.get("password");
         String username = body.get("username");
         String email = body.get("email");

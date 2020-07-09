@@ -23,9 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/register_confirm")
 class NewClass333333331111111111111 {
-    @Autowired
-    private ThreadDao threadDao;
-
     @GetMapping
     public String getRegisterConfirm() {
         return "register_confirm_page";
