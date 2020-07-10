@@ -33,7 +33,7 @@ public class ApiLogin extends JwtLoginFilter {
     public void respond(User user, String jwt, HttpServletRequest req, HttpServletResponse resp, Authentication authResult, AuthenticationException failed) throws IOException, ServletException {
         if(user != null) {
             if(req.getAttribute("req_header") != null) {
-                resp.addHeader("Authentication", "token" + jwt);
+                resp.addHeader("Authentication", "token " + jwt);
             } else {
                 Cookie cookie = new Cookie("auth", jwt);
                 cookie.setPath("/");
