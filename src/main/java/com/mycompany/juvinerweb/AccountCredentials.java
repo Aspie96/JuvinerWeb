@@ -8,16 +8,14 @@ package com.mycompany.juvinerweb;
 public class AccountCredentials {
     private String username;
     private String password;
-    private boolean header;
     
     public AccountCredentials() {
         
     }
     
-    public AccountCredentials(String username, String password, boolean header) {
+    public AccountCredentials(String username, String password) {
         this.username = username;
         this.password = password;
-        this.header = header;
     }
     
     public String getUsername() {
@@ -26,9 +24,5 @@ public class AccountCredentials {
     
     public String getPassword() {
         return this.password;
-    }
-    
-    public boolean getHeader() {
-        return this.header;
     }
 }

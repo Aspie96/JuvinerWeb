@@ -5,6 +5,7 @@
  */
 package com.mycompany.juvinerweb.api;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.juviner.data.User;
 import com.mycompany.juvinerweb.AccountCredentials;
@@ -31,9 +32,13 @@ public class ApiLogin extends JwtLoginFilter {
     @Override
     public void respond(User user, String jwt, HttpServletRequest req, HttpServletResponse resp, Authentication authResult, AuthenticationException failed) throws IOException, ServletException {
         if(user != null) {
-            Cookie cookie = new Cookie("auth", jwt);
-            cookie.setPath("/");
-            resp.addCookie(cookie);
+            if(req.getAttribute("req_header") != null) {
+                resp.addHeader("Authentication", "token" + jwt);
+            } else {
+                Cookie cookie = new Cookie("auth", jwt);
+                cookie.setPath("/");
+                resp.addCookie(cookie);
+            }
             resp.setContentType("application/json;charset=utf-8");
             try(PrintWriter out = resp.getWriter()) {
                 out.write(new ObjectMapper().writeValueAsString(new ApiSuccessResponse("user", user)));
@@ -49,6 +54,10 @@ public class ApiLogin extends JwtLoginFilter {
 
     @Override
     public AccountCredentials getCredentials(HttpServletRequest req) throws IOException {
-        return new ObjectMapper().readValue(req.getInputStream(), AccountCredentials.class);
+        JsonNode element = new ObjectMapper().readTree(req.getInputStream());
+        if(element.has("header")) {
+            req.setAttribute("req_header", true);
+        }
+        return new ObjectMapper().treeToValue(element, AccountCredentials.class);
     }
 }

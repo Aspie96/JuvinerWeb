@@ -38,15 +38,21 @@ public class JwtFilter extends GenericFilterBean {
                     jwtToken = cookie.getValue();
                 }
             }
-            if(jwtToken != null) {
-                ObjectMapper objectMapper = new ObjectMapper();
-            Claims claims = Jwts.parserBuilder().deserializeJsonWith(new JacksonDeserializer(objectMapper)).setSigningKey("sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123").build().parseClaimsJws(jwtToken.replace("Bearer",""))
-                    .getBody();
-                User user = objectMapper.convertValue(claims.get("user"), User.class);
-                List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String)claims.get("authorities"));
-                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(new LoggedUser(user, null, authorities), null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(token);
+        }
+        if(jwtToken == null) {
+            String authentication = req.getHeader("Authentication");
+            if(authentication != null) {
+                jwtToken = authentication.substring("token ".length());
             }
+        }
+        if(jwtToken != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+        Claims claims = Jwts.parserBuilder().deserializeJsonWith(new JacksonDeserializer(objectMapper)).setSigningKey("sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123").build().parseClaimsJws(jwtToken.replace("Bearer",""))
+                .getBody();
+            User user = objectMapper.convertValue(claims.get("user"), User.class);
+            List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String)claims.get("authorities"));
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(new LoggedUser(user, null, authorities), null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(token);
         }
         try {
             filterChain.doFilter(req, servletResponse);
