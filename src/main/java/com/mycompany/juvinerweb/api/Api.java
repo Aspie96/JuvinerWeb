@@ -75,7 +75,7 @@ public class Api {
         if(!category.isPresent()) {
             return new ResponseEntity(new ApiFailureResponse("Thread not found"), HttpStatus.NOT_FOUND);
         }
-        return new ApiSuccessResponse("category", category.get().toCategory(true, false, false, false, false, true, false, false));
+        return new ApiSuccessResponse("category", category.get().toCategory(true, false, false, true, false, true, false, false));
     }
     
     @GetMapping("/root")
