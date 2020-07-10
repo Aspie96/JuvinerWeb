@@ -89,7 +89,7 @@ public class WebSecurityConfig {
 
                     @Override
                     public AccountCredentials getCredentials(HttpServletRequest req) throws IOException {
-                        return new AccountCredentials(req.getParameter("username"), req.getParameter("password"));
+                        return new AccountCredentials(req.getParameter("username"), req.getParameter("password"), false);
                     }
                 }, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAt(jwtFilter, UsernamePasswordAuthenticationFilter.class)
