@@ -5,6 +5,7 @@
  */
 package com.mycompany.juvinerweb.api;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.juviner.data.User;
@@ -58,6 +59,6 @@ public class ApiLogin extends JwtLoginFilter {
         if(element.has("header")) {
             req.setAttribute("req_header", true);
         }
-        return new ObjectMapper().treeToValue(element, AccountCredentials.class);
+        return new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).treeToValue(element, AccountCredentials.class);
     }
 }
