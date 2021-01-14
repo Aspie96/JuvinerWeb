@@ -77,7 +77,7 @@ public class Api {
         List<Section> sections = new ArrayList<>();
         sectionDao.findAll().forEach(section -> sections.add(section.toSection(true, false, false, false, false, false, false)));
         Root root = new Root("Lorem ipsum dolor sit amet, consectetur adipisci elit, sed do eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullamco laboriosam, nisi ut aliquid ex ea commodi consequatur. Duis aute irure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", sections);
-        return new ApiSuccessResponse("category", root);
+        return new ApiSuccessResponse("root", root);
     }
     
     @PostMapping(path="/threads/{thread_id}/posts", consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
