@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/root")
+@RequestMapping("/")
 class RootController {
     @Autowired
     private SectionDao sectionDao;

@@ -8,6 +8,7 @@ package com.juviner.juvinerweb;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.juviner.data.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.jackson.io.JacksonDeserializer;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -31,11 +33,13 @@ public class JwtFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException {
         HttpServletRequest req = (HttpServletRequest)servletRequest;
         String jwtToken = null;
+        Cookie c = null;
         Cookie[] cookies = req.getCookies();
         if(cookies != null) {
             for(Cookie cookie : req.getCookies()) {
                 if(cookie.getName().equals("auth")) {
                     jwtToken = cookie.getValue();
+                    c = cookie;
                 }
             }
         }
@@ -47,12 +51,19 @@ public class JwtFilter extends GenericFilterBean {
         }
         if(jwtToken != null) {
             ObjectMapper objectMapper = new ObjectMapper();
-        Claims claims = Jwts.parserBuilder().deserializeJsonWith(new JacksonDeserializer(objectMapper)).setSigningKey("sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123").build().parseClaimsJws(jwtToken.replace("Bearer",""))
-                .getBody();
-            User user = objectMapper.convertValue(claims.get("user"), User.class);
-            List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String)claims.get("authorities"));
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(new LoggedUser(user, null, authorities), null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(token);
+            try {
+                Claims claims = Jwts.parserBuilder().deserializeJsonWith(new JacksonDeserializer(objectMapper)).setSigningKey("sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123sang123").build().parseClaimsJws(jwtToken.replace("Bearer","")).getBody();
+                User user = objectMapper.convertValue(claims.get("user"), User.class);
+                List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String)claims.get("authorities"));
+                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(new LoggedUser(user, null, authorities), null, authorities);
+                SecurityContextHolder.getContext().setAuthentication(token);
+            } catch(JwtException e) {
+                if(c != null) {
+                    c.setMaxAge(0);
+                    HttpServletResponse resp = (HttpServletResponse)servletResponse;
+                    resp.addCookie(c);
+                }
+            }
         }
         try {
             filterChain.doFilter(req, servletResponse);
